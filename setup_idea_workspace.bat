@@ -1,0 +1,9 @@
+@ECHO OFF
+echo Setting up decomp workspace...
+call gradlew setupDecompWorkspace > setup_decomp_workspace_log.txt
+echo Setting up idea workspace...
+call gradlew idea > setup_idea_workspace_log.txt
+echo Creating run directory...
+mkdir run
+echo All done!
+pause

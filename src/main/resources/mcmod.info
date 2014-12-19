@@ -1,0 +1,16 @@
+[
+{
+  "modid": "CandiPerUserDifficulty",
+  "name": "Candi's Per User Difficulty",
+  "description": "Per-user difficulty levels.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["ExampleDude"],
+  "credits": "Candice",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
