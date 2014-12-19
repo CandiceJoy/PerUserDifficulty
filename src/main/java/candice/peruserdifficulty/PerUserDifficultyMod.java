@@ -19,6 +19,7 @@ public class PerUserDifficultyMod
 {
     public static final String MODID = "CandiPerUserDifficulty";
     public static final String VERSION = "1.0";
+    public static final long MINIMUM_TIME_BETWEEN_DIFFICULTY_CHANGES = 1000 * 5;
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event)

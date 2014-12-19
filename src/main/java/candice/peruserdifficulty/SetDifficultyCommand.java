@@ -34,13 +34,12 @@ public class SetDifficultyCommand extends CommandBase
     @Override
     public void processCommand( ICommandSender sender, String[] params )
     {
-        if( !(sender instanceof EntityPlayer ) )
+        if( !(sender instanceof EntityPlayer) )
         {
             return;
         }
 
         EntityPlayer player = (EntityPlayer)sender;
-        UUID uuid = player.getUniqueID();
         ChatComponentText return_message = null;
 
         if( params.length != 1 )
@@ -76,20 +75,7 @@ public class SetDifficultyCommand extends CommandBase
                     }
                     else
                     {
-                        PlayerDifficulty difficulty = null;
-
-                        switch( difficulty_number )
-                        {
-                            case 1:
-                                difficulty = PlayerDifficulty.EASY;
-                                break;
-                            case 2:
-                                difficulty = PlayerDifficulty.MEDIUM;
-                                break;
-                            case 3:
-                                difficulty = PlayerDifficulty.HARD;
-                                break;
-                        }
+                        PlayerDifficulty difficulty = PlayerDifficultyHelper.numberToDifficulty( difficulty_number );
 
                         if( difficulty == null )
                         {
@@ -97,8 +83,19 @@ public class SetDifficultyCommand extends CommandBase
                         }
                         else
                         {
-                            PlayerDifficultyList.setPlayerDifficulty( uuid, difficulty );
-                            return_message = getReturnMessage( "Difficulty set to " + difficulty + "." );
+                            //Long last_change = PlayerDifficultyList.getPlayerLastDifficultyChange( uuid );
+                            Long last_change = PlayerDifficultyNBTHelper.getLastChanged( player );
+
+                            if( System.currentTimeMillis() < last_change + PerUserDifficultyMod.MINIMUM_TIME_BETWEEN_DIFFICULTY_CHANGES )
+                            {
+                                return_message = getErrorMessage( "You must wait longer before changing your difficulty again." );
+                            }
+                            else
+                            {
+                                //PlayerDifficultyList.setPlayerDifficulty( uuid, difficulty );
+                                PlayerDifficultyNBTHelper.setDifficultyLevel( player, difficulty );
+                                return_message = getReturnMessage( "Difficulty set to " + difficulty + "." );
+                            }
                         }
                     }
                 }
