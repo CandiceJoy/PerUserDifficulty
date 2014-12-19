@@ -1,54 +1,65 @@
 package candice.peruserdifficulty;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagInt;
 
 /**
  * Created by Candice on 12/18/2014.
  */
+
 public class PlayerDifficultyNBTHelper
 {
-    public static final String MOD_NBT = "candi-per-user-difficulty";
+    public static final String MOD_NBT = "CandisPerUserDifficulty";
     public static final String DIFFICULTY_NBT = "difficulty";
     public static final String LAST_CHANGED_NBT = "last-changed";
 
     public static PlayerDifficulty getDifficultyLevel( EntityPlayer player )
     {
-        //int difficulty_number = player.getEntityData().getCompoundTag( player.PERSISTED_NBT_TAG ).getInteger( DIFFICULTY_NBT );
-        NBTTagCompound persistent = player.getEntityData().getCompoundTag( EntityPlayer.PERSISTED_NBT_TAG );
-        NBTTagCompound mod_tag = persistent.getCompoundTag( MOD_NBT );
-        int difficulty_number = mod_tag.getInteger( DIFFICULTY_NBT );
-
-        return PlayerDifficultyHelper.numberToDifficulty( difficulty_number );
+        return PlayerDifficultyHelper.numberToDifficulty( getModNBT( player ).getInteger( DIFFICULTY_NBT ) );
     }
 
     public static void setDifficultyLevel( EntityPlayer player, PlayerDifficulty difficulty )
     {
-        NBTTagCompound persistent = player.getEntityData().getCompoundTag( EntityPlayer.PERSISTED_NBT_TAG );
-        NBTTagCompound mod_tag = persistent.getCompoundTag( MOD_NBT );
-        mod_tag.setInteger( DIFFICULTY_NBT, PlayerDifficultyHelper.difficultyToNumber( difficulty ) );
-        //player.getEntityData().getCompoundTag( player.PERSISTED_NBT_TAG ).setInteger( DIFFICULTY_NBT, PlayerDifficultyHelper.difficultyToNumber( difficulty ) );
+        getModNBT( player ).setInteger( DIFFICULTY_NBT, PlayerDifficultyHelper.difficultyToNumber( difficulty ) );
         updateLastChanged( player );
     }
 
     public static long getLastChanged( EntityPlayer player )
     {
-        NBTTagCompound persistent = player.getEntityData().getCompoundTag( EntityPlayer.PERSISTED_NBT_TAG );
-        NBTTagCompound mod_tag = persistent.getCompoundTag( MOD_NBT );
-        long last_changed = mod_tag.getLong( LAST_CHANGED_NBT );
-        //long last_changed = player.getEntityData().getCompoundTag( player.PERSISTED_NBT_TAG ).getLong( LAST_CHANGED_NBT );
-
-        return last_changed;
+        return getModNBT( player ).getLong( LAST_CHANGED_NBT );
     }
 
     private static void updateLastChanged( EntityPlayer player )
     {
-        NBTTagCompound persistent = player.getEntityData().getCompoundTag( EntityPlayer.PERSISTED_NBT_TAG );
-        NBTTagCompound mod_tag = persistent.getCompoundTag( MOD_NBT );
-        mod_tag.setLong( LAST_CHANGED_NBT, System.currentTimeMillis() );
+        getModNBT( player ).setLong( LAST_CHANGED_NBT, System.currentTimeMillis() );
+    }
 
-        //player.getEntityData().getCompoundTag( player.PERSISTED_NBT_TAG ).setLong( LAST_CHANGED_NBT, System.currentTimeMillis() );
+    private static NBTTagCompound getModNBT( EntityPlayer player )
+    {
+        NBTTagCompound root_tag = player.getEntityData();
+        NBTTagCompound persistent_tag = null;
+        NBTTagCompound mod_tag = null;
+
+        if( root_tag.hasKey( EntityPlayer.PERSISTED_NBT_TAG ) )
+        {
+            persistent_tag = root_tag.getCompoundTag( EntityPlayer.PERSISTED_NBT_TAG );
+        }
+        else
+        {
+            persistent_tag = new NBTTagCompound();
+            root_tag.setTag( EntityPlayer.PERSISTED_NBT_TAG, persistent_tag );
+        }
+
+        if( persistent_tag.hasKey( MOD_NBT ) )
+        {
+            mod_tag = persistent_tag.getCompoundTag( MOD_NBT );
+        }
+        else
+        {
+            mod_tag = new NBTTagCompound();
+            persistent_tag.setTag( MOD_NBT, mod_tag );
+        }
+
+        return mod_tag;
     }
 }

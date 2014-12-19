@@ -6,13 +6,26 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
-import java.util.UUID;
-
 /**
  * Created by Candice on 12/18/2014.
  */
 public class SetDifficultyCommand extends CommandBase
 {
+    private static ChatComponentText getMessage( EnumChatFormatting color, String message )
+    {
+        return new ChatComponentText( color + message );
+    }
+
+    private static ChatComponentText getErrorMessage( String message )
+    {
+        return getMessage( EnumChatFormatting.RED, message );
+    }
+
+    private static ChatComponentText getReturnMessage( String message )
+    {
+        return getMessage( EnumChatFormatting.GREEN, message );
+    }
+
     @Override
     public String getCommandName()
     {
@@ -34,12 +47,12 @@ public class SetDifficultyCommand extends CommandBase
     @Override
     public void processCommand( ICommandSender sender, String[] params )
     {
-        if( !(sender instanceof EntityPlayer) )
+        if( !( sender instanceof EntityPlayer ) )
         {
             return;
         }
 
-        EntityPlayer player = (EntityPlayer)sender;
+        EntityPlayer player = (EntityPlayer) sender;
         ChatComponentText return_message = null;
 
         if( params.length != 1 )
@@ -61,8 +74,7 @@ public class SetDifficultyCommand extends CommandBase
                 try
                 {
                     difficulty_number = Integer.parseInt( difficulty_string );
-                }
-                catch( NumberFormatException e )
+                }catch( NumberFormatException e )
                 {
                     return_message = getErrorMessage( "Difficulty not a number." );
                 }
@@ -103,20 +115,5 @@ public class SetDifficultyCommand extends CommandBase
         }
 
         ( (EntityPlayer) sender ).addChatComponentMessage( return_message );
-    }
-
-    private static ChatComponentText getMessage( EnumChatFormatting color, String message )
-    {
-        return new ChatComponentText( color + message );
-    }
-
-    private static ChatComponentText getErrorMessage( String message )
-    {
-        return getMessage( EnumChatFormatting.RED, message );
-    }
-
-    private static ChatComponentText getReturnMessage( String message )
-    {
-        return getMessage( EnumChatFormatting.GREEN, message );
     }
 }

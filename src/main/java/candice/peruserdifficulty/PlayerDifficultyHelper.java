@@ -1,7 +1,5 @@
 package candice.peruserdifficulty;
 
-import net.minecraftforge.event.world.NoteBlockEvent;
-
 /**
  * Created by Candice on 12/18/2014.
  */
@@ -35,5 +33,45 @@ public class PlayerDifficultyHelper
             default:
                 return null;
         }
+    }
+
+    public static double getDamageTakenMultiplier( PlayerDifficulty difficulty )
+    {
+        double damage_multiplier = 1.0;
+
+        switch( difficulty )
+        {
+            case EASY:
+                damage_multiplier = 0.5;
+                break;
+            case MEDIUM:
+                damage_multiplier = 1.0;
+                break;
+            case HARD:
+                damage_multiplier = 2.0;
+                break;
+        }
+
+        return damage_multiplier;
+    }
+
+    public static double getDamageDealtMultiplier( PlayerDifficulty difficulty )
+    {
+        double damage_multiplier = 1.0;
+
+        switch( difficulty )
+        {
+            case EASY:
+                damage_multiplier = 2.0;
+                break;
+            case MEDIUM:
+                damage_multiplier = 1.0;
+                break;
+            case HARD:
+                damage_multiplier = 0.5;
+                break;
+        }
+
+        return damage_multiplier;
     }
 }

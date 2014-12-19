@@ -1,55 +1,41 @@
 package candice.peruserdifficulty;
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.DamageSource;
-import net.minecraftforge.event.entity.EntityEvent;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.player.PlayerDropsEvent;
-import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
 
 public class EventHandlers
 {
     @SubscribeEvent(priority= EventPriority.NORMAL, receiveCanceled=true)
     public void onEvent( LivingHurtEvent event )
     {
-        Entity entity = event.entity;
+        Entity damaged = event.entity;
+        Entity damager = event.source.getEntity();
 
-        if( !(entity instanceof EntityPlayer ) )
+        if( damaged instanceof EntityPlayer && !( damager instanceof EntityPlayer ) )
         {
-            return;
-        }
+            EntityPlayer player = (EntityPlayer) damaged;
+            PlayerDifficulty difficulty = PlayerDifficultyNBTHelper.getDifficultyLevel( player );
+            System.out.println( "Difficulty: " + difficulty );
 
-        EntityPlayer player = (EntityPlayer)entity;
-
-        //PlayerDifficulty difficulty = PlayerDifficultyList.getPlayerDifficulty( entity.getUniqueID() );
-        PlayerDifficulty difficulty = PlayerDifficultyNBTHelper.getDifficultyLevel( player );
-        System.out.println( "Difficulty: " + difficulty );
-        double damage_multiplier = 1.0;
-
-        if( difficulty != null )
-        {
-            switch( difficulty )
+            if( difficulty != null )
             {
-                case EASY:
-                    damage_multiplier = 0.5;
-                    break;
-                case MEDIUM:
-                    damage_multiplier = 1.0;
-                    break;
-                case HARD:
-                    damage_multiplier = 2.0;
-                    break;
+                event.ammount *= PlayerDifficultyHelper.getDamageTakenMultiplier( difficulty );
             }
         }
+        else if( damager instanceof EntityPlayer && !( damaged instanceof EntityPlayer ) )
+        {
+            EntityPlayer player = (EntityPlayer) damager;
+            PlayerDifficulty difficulty = PlayerDifficultyNBTHelper.getDifficultyLevel( player );
+            System.out.println( "Difficulty: " + difficulty );
 
-        event.ammount *= damage_multiplier;
+            if( difficulty != null )
+            {
+                event.ammount *= PlayerDifficultyHelper.getDamageDealtMultiplier( difficulty );
+            }
+        }
     }
 
     @SubscribeEvent(priority= EventPriority.NORMAL, receiveCanceled=true)
@@ -63,8 +49,6 @@ public class EventHandlers
         }
 
         EntityPlayer player = (EntityPlayer)entity;
-
-        //PlayerDifficulty difficulty = PlayerDifficultyList.getPlayerDifficulty( entity.getUniqueID() );
         PlayerDifficulty difficulty = PlayerDifficultyNBTHelper.getDifficultyLevel( player );
 
         if( difficulty != null )
