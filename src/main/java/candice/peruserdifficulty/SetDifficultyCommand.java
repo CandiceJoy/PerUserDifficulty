@@ -77,20 +77,21 @@ public class SetDifficultyCommand extends CommandBase
             {
                 //return_message = getErrorMessage( "Difficulty not a valid length." );
                 PlayerDifficulty difficulty = null;
+                String standardized_difficulty_string = difficulty_string.toLowerCase().trim();
 
-                if( difficulty_string.toLowerCase().trim().equals( "disabled" ) )
+                if( standardized_difficulty_string.equals( "disabled" ) )
                 {
                     difficulty = PlayerDifficulty.DISABLED;
                 }
-                else if( difficulty_string.toLowerCase().trim().equals( "easy" ) )
+                else if( standardized_difficulty_string.equals( "easy" ) )
                 {
                     difficulty = PlayerDifficulty.EASY;
                 }
-                else if( difficulty_string.toLowerCase().trim().equals( "medium" ) )
+                else if( standardized_difficulty_string.equals( "medium" ) || standardized_difficulty_string.equals( "med" ) )
                 {
                     difficulty = PlayerDifficulty.MEDIUM;
                 }
-                else if( difficulty_string.toLowerCase().trim().equals( "hard" ) )
+                else if( standardized_difficulty_string.equals( "hard" ) )
                 {
                     difficulty = PlayerDifficulty.HARD;
                 }
