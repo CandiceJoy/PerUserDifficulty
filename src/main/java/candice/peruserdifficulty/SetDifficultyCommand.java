@@ -97,7 +97,7 @@ public class SetDifficultyCommand extends CommandBase
 
                 if( difficulty == null )
                 {
-                    return_message = getErrorMessage( "Invalid difficulty." );
+                    return_message = getErrorMessage( "Valid difficulties are disabled, easy, medium, and hard." );
                 }
                 else
                 {
