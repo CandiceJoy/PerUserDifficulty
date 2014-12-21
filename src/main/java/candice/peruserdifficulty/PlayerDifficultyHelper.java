@@ -5,6 +5,22 @@ package candice.peruserdifficulty;
  */
 public class PlayerDifficultyHelper
 {
+    private static double[] damage_taken;
+    private static double[] damage_dealt;
+    private static PlayerDifficulty min_keepinventory;
+
+    public static void setConfig( double[] damage_taken_in, double[] damage_dealt_in, PlayerDifficulty min_keepinventory_in )
+    {
+        if( damage_taken_in.length != 3 || damage_dealt_in.length != 3 )
+        {
+            return;
+        }
+
+        damage_taken = damage_taken_in;
+        damage_dealt = damage_dealt_in;
+        min_keepinventory = min_keepinventory_in;
+    }
+
     public static int difficultyToNumber( PlayerDifficulty difficulty )
     {
         switch( difficulty )
@@ -37,18 +53,23 @@ public class PlayerDifficultyHelper
 
     public static double getDamageTakenMultiplier( PlayerDifficulty difficulty )
     {
+        if( damage_taken == null )
+        {
+            return 1.0;
+        }
+
         double damage_multiplier = 1.0;
 
         switch( difficulty )
         {
             case EASY:
-                damage_multiplier = 0.5;
+                damage_multiplier = damage_taken[0];
                 break;
             case MEDIUM:
-                damage_multiplier = 1.0;
+                damage_multiplier = damage_taken[1];
                 break;
             case HARD:
-                damage_multiplier = 2.0;
+                damage_multiplier = damage_taken[2];
                 break;
         }
 
@@ -57,21 +78,31 @@ public class PlayerDifficultyHelper
 
     public static double getDamageDealtMultiplier( PlayerDifficulty difficulty )
     {
+        if( damage_dealt == null )
+        {
+            return 1.0;
+        }
+
         double damage_multiplier = 1.0;
 
         switch( difficulty )
         {
             case EASY:
-                damage_multiplier = 2.0;
+                damage_multiplier = damage_dealt[0];
                 break;
             case MEDIUM:
-                damage_multiplier = 1.0;
+                damage_multiplier = damage_dealt[1];
                 break;
             case HARD:
-                damage_multiplier = 0.5;
+                damage_multiplier = damage_dealt[2];
                 break;
         }
 
         return damage_multiplier;
+    }
+
+    public static boolean shouldDoKeepInventory( PlayerDifficulty difficulty )
+    {
+        return difficultyToNumber( difficulty ) <= difficultyToNumber( min_keepinventory );
     }
 }

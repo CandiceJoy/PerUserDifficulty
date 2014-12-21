@@ -19,6 +19,7 @@ public class EventHandlers
             EntityPlayer player = (EntityPlayer) damaged;
             PlayerDifficulty difficulty = PlayerDifficultyNBTHelper.getDifficultyLevel( player );
             System.out.println( "Difficulty: " + difficulty );
+            System.out.println( "Multiplier: " + PlayerDifficultyHelper.getDamageTakenMultiplier( difficulty ) );
 
             if( difficulty != null )
             {
@@ -53,14 +54,9 @@ public class EventHandlers
 
         if( difficulty != null )
         {
-            switch( difficulty )
+            if( !PlayerDifficultyHelper.shouldDoKeepInventory( difficulty ) )
             {
-                case EASY:
-                    break;
-                case MEDIUM:
-                case HARD:
                     player.inventory.dropAllItems();
-                    break;
             }
         }
     }
