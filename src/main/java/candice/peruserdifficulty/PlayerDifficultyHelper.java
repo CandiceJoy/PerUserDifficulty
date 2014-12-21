@@ -7,9 +7,9 @@ public class PlayerDifficultyHelper
 {
     private static double[] damage_taken;
     private static double[] damage_dealt;
-    private static PlayerDifficulty min_keepinventory;
+    private static PlayerDifficulty max_keepinventory;
 
-    public static void setConfig( double[] damage_taken_in, double[] damage_dealt_in, PlayerDifficulty min_keepinventory_in )
+    public static void setConfig( double[] damage_taken_in, double[] damage_dealt_in, PlayerDifficulty max_keepinventory_in )
     {
         if( damage_taken_in.length != 3 || damage_dealt_in.length != 3 )
         {
@@ -18,7 +18,7 @@ public class PlayerDifficultyHelper
 
         damage_taken = damage_taken_in;
         damage_dealt = damage_dealt_in;
-        min_keepinventory = min_keepinventory_in;
+        max_keepinventory = max_keepinventory_in;
     }
 
     public static int difficultyToNumber( PlayerDifficulty difficulty )
@@ -103,6 +103,6 @@ public class PlayerDifficultyHelper
 
     public static boolean shouldDoKeepInventory( PlayerDifficulty difficulty )
     {
-        return difficultyToNumber( difficulty ) <= difficultyToNumber( min_keepinventory );
+        return difficultyToNumber( difficulty ) <= difficultyToNumber( max_keepinventory );
     }
 }
