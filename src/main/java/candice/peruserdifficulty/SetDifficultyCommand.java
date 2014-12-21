@@ -26,6 +26,12 @@ public class SetDifficultyCommand extends CommandBase
         return getMessage( EnumChatFormatting.GREEN, message );
     }
 
+    private static ChatComponentText setDifficulty( EntityPlayer player, PlayerDifficulty difficulty )
+    {
+        PlayerDifficultyNBTHelper.setDifficultyLevel( player, difficulty );
+        return getReturnMessage( "Difficulty set to " + difficulty + "." );
+    }
+
     @Override
     public String getCommandName()
     {
@@ -69,11 +75,38 @@ public class SetDifficultyCommand extends CommandBase
 
             if( difficulty_string.length() != 1 )
             {
-                return_message = getErrorMessage( "Difficulty not a valid length." );
+                //return_message = getErrorMessage( "Difficulty not a valid length." );
+                PlayerDifficulty difficulty = null;
+
+                if( difficulty_string.toLowerCase().trim().equals( "disabled" ) )
+                {
+                    difficulty = PlayerDifficulty.DISABLED;
+                }
+                else if( difficulty_string.toLowerCase().trim().equals( "easy" ) )
+                {
+                    difficulty = PlayerDifficulty.EASY;
+                }
+                else if( difficulty_string.toLowerCase().trim().equals( "medium" ) )
+                {
+                    difficulty = PlayerDifficulty.MEDIUM;
+                }
+                else if( difficulty_string.toLowerCase().trim().equals( "hard" ) )
+                {
+                    difficulty = PlayerDifficulty.HARD;
+                }
+
+                if( difficulty == null )
+                {
+                    return_message = getErrorMessage( "Invalid difficulty." );
+                }
+                else
+                {
+                    return_message = setDifficulty( player, difficulty );
+                }
             }
             else
             {
-                int difficulty_number = -10;
+                int difficulty_number = -1;
 
                 try
                 {
@@ -83,7 +116,7 @@ public class SetDifficultyCommand extends CommandBase
                     return_message = getErrorMessage( "Difficulty not a number." );
                 }
 
-                if( difficulty_number != -10 )
+                if( difficulty_number != -1 )
                 {
                     if( difficulty_number < 0 || difficulty_number > 3 )
                     {
@@ -109,8 +142,8 @@ public class SetDifficultyCommand extends CommandBase
                             else
                             {
                                 //PlayerDifficultyList.setPlayerDifficulty( uuid, difficulty );
-                                PlayerDifficultyNBTHelper.setDifficultyLevel( player, difficulty );
-                                return_message = getReturnMessage( "Difficulty set to " + difficulty + "." );
+
+                                return_message = setDifficulty( player, difficulty );
                             }
                         }
                     }
