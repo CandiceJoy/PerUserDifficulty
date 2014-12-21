@@ -5,7 +5,8 @@ package candice.peruserdifficulty;
  */
 public enum PlayerDifficulty
 {
+    DISABLED,
     EASY,
     MEDIUM,
-    HARD;
+    HARD
 }

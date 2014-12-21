@@ -25,6 +25,8 @@ public class PlayerDifficultyHelper
     {
         switch( difficulty )
         {
+            case DISABLED:
+                return 0;
             case EASY:
                 return 1;
             case MEDIUM:
@@ -40,6 +42,8 @@ public class PlayerDifficultyHelper
     {
         switch( difficulty )
         {
+            case 0:
+                return PlayerDifficulty.DISABLED;
             case 1:
                 return PlayerDifficulty.EASY;
             case 2:
@@ -53,7 +57,7 @@ public class PlayerDifficultyHelper
 
     public static double getDamageTakenMultiplier( PlayerDifficulty difficulty )
     {
-        if( damage_taken == null )
+        if( damage_taken == null || difficulty == PlayerDifficulty.DISABLED )
         {
             return 1.0;
         }
@@ -78,7 +82,7 @@ public class PlayerDifficultyHelper
 
     public static double getDamageDealtMultiplier( PlayerDifficulty difficulty )
     {
-        if( damage_dealt == null )
+        if( damage_dealt == null || difficulty == PlayerDifficulty.DISABLED )
         {
             return 1.0;
         }

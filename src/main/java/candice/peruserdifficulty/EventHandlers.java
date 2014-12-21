@@ -18,10 +18,8 @@ public class EventHandlers
         {
             EntityPlayer player = (EntityPlayer) damaged;
             PlayerDifficulty difficulty = PlayerDifficultyNBTHelper.getDifficultyLevel( player );
-            System.out.println( "Difficulty: " + difficulty );
-            System.out.println( "Multiplier: " + PlayerDifficultyHelper.getDamageTakenMultiplier( difficulty ) );
 
-            if( difficulty != null )
+            if( difficulty != null && difficulty != PlayerDifficulty.DISABLED )
             {
                 event.ammount *= PlayerDifficultyHelper.getDamageTakenMultiplier( difficulty );
             }
@@ -30,9 +28,8 @@ public class EventHandlers
         {
             EntityPlayer player = (EntityPlayer) damager;
             PlayerDifficulty difficulty = PlayerDifficultyNBTHelper.getDifficultyLevel( player );
-            System.out.println( "Difficulty: " + difficulty );
 
-            if( difficulty != null )
+            if( difficulty != null && difficulty != PlayerDifficulty.DISABLED )
             {
                 event.ammount *= PlayerDifficultyHelper.getDamageDealtMultiplier( difficulty );
             }
@@ -52,7 +49,7 @@ public class EventHandlers
         EntityPlayer player = (EntityPlayer)entity;
         PlayerDifficulty difficulty = PlayerDifficultyNBTHelper.getDifficultyLevel( player );
 
-        if( difficulty != null )
+        if( difficulty != null && difficulty != PlayerDifficulty.DISABLED )
         {
             if( !PlayerDifficultyHelper.shouldDoKeepInventory( difficulty ) )
             {

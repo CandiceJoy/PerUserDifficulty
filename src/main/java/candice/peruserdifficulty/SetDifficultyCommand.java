@@ -55,7 +55,11 @@ public class SetDifficultyCommand extends CommandBase
         EntityPlayer player = (EntityPlayer) sender;
         ChatComponentText return_message = null;
 
-        if( params.length != 1 )
+        if( params.length == 0 )
+        {
+            return_message = getErrorMessage( "Your current difficulty is: " + PlayerDifficultyNBTHelper.getDifficultyLevel( player ) );
+        }
+        else if( params.length != 1 )
         {
             return_message = getErrorMessage( "Invalid number of parameters." );
         }
@@ -81,9 +85,9 @@ public class SetDifficultyCommand extends CommandBase
 
                 if( difficulty_number != -10 )
                 {
-                    if( difficulty_number < 1 || difficulty_number > 3 )
+                    if( difficulty_number < 0 || difficulty_number > 3 )
                     {
-                        return_message = getErrorMessage( "Valid difficulties are 1-3." );
+                        return_message = getErrorMessage( "Valid difficulties are 0-3." );
                     }
                     else
                     {
