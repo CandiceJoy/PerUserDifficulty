@@ -98,7 +98,7 @@ public class SetDifficultyCommand extends CommandBase
                             //Long last_change = PlayerDifficultyList.getPlayerLastDifficultyChange( uuid );
                             Long last_change = PlayerDifficultyNBTHelper.getLastChanged( player );
 
-                            if( System.currentTimeMillis() < last_change + PerUserDifficultyMod.MINIMUM_TIME_BETWEEN_DIFFICULTY_CHANGES )
+                            if( System.currentTimeMillis() < last_change + PerUserDifficultyMod.getMinimumTimeBetweenDifficultyChanges() )
                             {
                                 return_message = getErrorMessage( "You must wait longer before changing your difficulty again." );
                             }
