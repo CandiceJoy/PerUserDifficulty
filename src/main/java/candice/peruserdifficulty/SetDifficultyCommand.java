@@ -75,7 +75,6 @@ public class SetDifficultyCommand extends CommandBase
 
             if( difficulty_string.length() != 1 )
             {
-                //return_message = getErrorMessage( "Difficulty not a valid length." );
                 PlayerDifficulty difficulty = null;
                 String standardized_difficulty_string = difficulty_string.toLowerCase().trim();
 
@@ -133,7 +132,6 @@ public class SetDifficultyCommand extends CommandBase
                         }
                         else
                         {
-                            //Long last_change = PlayerDifficultyList.getPlayerLastDifficultyChange( uuid );
                             Long last_change = PlayerDifficultyNBTHelper.getLastChanged( player );
 
                             if( System.currentTimeMillis() < last_change + PerUserDifficultyMod.getMinimumTimeBetweenDifficultyChanges() )
@@ -142,8 +140,6 @@ public class SetDifficultyCommand extends CommandBase
                             }
                             else
                             {
-                                //PlayerDifficultyList.setPlayerDifficulty( uuid, difficulty );
-
                                 return_message = setDifficulty( player, difficulty );
                             }
                         }
