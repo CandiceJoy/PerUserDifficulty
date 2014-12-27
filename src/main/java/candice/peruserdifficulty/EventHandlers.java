@@ -43,8 +43,6 @@ public class EventHandlers
     @SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
     public void onEvent( PlayerDropsEvent event )
     {
-        System.out.println( "Player drops!!!" );
-
         Entity entity = event.entity;
 
         if( !(entity instanceof EntityPlayer ) )
@@ -55,14 +53,10 @@ public class EventHandlers
         EntityPlayer player = (EntityPlayer)entity;
         PlayerDifficulty difficulty = NBTHelper.getDifficultyLevel( player );
 
-        System.out.println( "difficulty: " + difficulty );
-
         if( difficulty != null && difficulty != PlayerDifficulty.DISABLED )
         {
             if( PlayerDifficultyHelper.shouldDoKeepInventory( difficulty ) )
             {
-                System.out.println( "Keep inventory!" );
-
                 final ArrayList<EntityItem> drops_as_entities = event.drops;
                 ArrayList<ItemStack> drops_as_itemstack_arraylist = new ArrayList<ItemStack>();
 
@@ -77,7 +71,5 @@ public class EventHandlers
                 event.setCanceled( true );
             }
         }
-
-        System.out.println( "canceled: " + event.isCanceled() );
     }
 }

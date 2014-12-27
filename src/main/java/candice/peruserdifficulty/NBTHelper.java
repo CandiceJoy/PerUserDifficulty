@@ -42,38 +42,29 @@ public class NBTHelper
 
     public static void saveInventory( EntityPlayer player, ArrayList<ItemStack> inventory )
     {
-        System.out.println( "A" );
         NBTTagList list = new NBTTagList();
-        System.out.println( "B" );
+
         for( ItemStack stack : inventory )
         {
-            System.out.println( "C" );
             NBTTagCompound compound = new NBTTagCompound();
             stack.writeToNBT( compound );
             list.appendTag( compound );
-            System.out.println( "D" );
         }
-        System.out.println( "E" );
+
         getModNBT( player ).setTag( SAVED_INVENTORY_NBT, list );
-        System.out.println( "F" );
     }
 
     public static ArrayList<ItemStack> getSavedInventory( EntityPlayer player )
     {
-        System.out.println( "a" );
         ArrayList<ItemStack> inventory = new ArrayList<ItemStack>();
-        System.out.println( "b" );
         NBTTagList list = getModNBT( player ).getTagList( SAVED_INVENTORY_NBT, Constants.NBT.TAG_COMPOUND );
-        System.out.println( "c" );
 
         for( int x = 0; x < list.tagCount(); x++ )
         {
-            System.out.println( "d" );
             NBTTagCompound compound = list.getCompoundTagAt( x );
             inventory.add( ItemStack.loadItemStackFromNBT( compound ) );
-            System.out.println( "e" );
         }
-        System.out.println( "f" );
+
         return inventory;
     }
 
