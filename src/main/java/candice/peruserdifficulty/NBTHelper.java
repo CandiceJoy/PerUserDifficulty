@@ -1,17 +1,23 @@
 package candice.peruserdifficulty;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraftforge.common.util.Constants;
+
+import java.util.ArrayList;
 
 /**
  * Created by Candice on 12/18/2014.
  */
 
-public class PlayerDifficultyNBTHelper
+public class NBTHelper
 {
     public static final String MOD_NBT = "CandisPerUserDifficulty";
     public static final String DIFFICULTY_NBT = "difficulty";
     public static final String LAST_CHANGED_NBT = "last-changed";
+    public static final String SAVED_INVENTORY_NBT = "saved-inventory";
 
     public static PlayerDifficulty getDifficultyLevel( EntityPlayer player )
     {
@@ -32,6 +38,48 @@ public class PlayerDifficultyNBTHelper
     private static void updateLastChanged( EntityPlayer player )
     {
         getModNBT( player ).setLong( LAST_CHANGED_NBT, System.currentTimeMillis() );
+    }
+
+    public static void saveInventory( EntityPlayer player, ArrayList<ItemStack> inventory )
+    {
+        System.out.println( "A" );
+        NBTTagList list = new NBTTagList();
+        System.out.println( "B" );
+        for( ItemStack stack : inventory )
+        {
+            System.out.println( "C" );
+            NBTTagCompound compound = new NBTTagCompound();
+            stack.writeToNBT( compound );
+            list.appendTag( compound );
+            System.out.println( "D" );
+        }
+        System.out.println( "E" );
+        getModNBT( player ).setTag( SAVED_INVENTORY_NBT, list );
+        System.out.println( "F" );
+    }
+
+    public static ArrayList<ItemStack> getSavedInventory( EntityPlayer player )
+    {
+        System.out.println( "a" );
+        ArrayList<ItemStack> inventory = new ArrayList<ItemStack>();
+        System.out.println( "b" );
+        NBTTagList list = getModNBT( player ).getTagList( SAVED_INVENTORY_NBT, Constants.NBT.TAG_COMPOUND );
+        System.out.println( "c" );
+
+        for( int x = 0; x < list.tagCount(); x++ )
+        {
+            System.out.println( "d" );
+            NBTTagCompound compound = list.getCompoundTagAt( x );
+            inventory.add( ItemStack.loadItemStackFromNBT( compound ) );
+            System.out.println( "e" );
+        }
+        System.out.println( "f" );
+        return inventory;
+    }
+
+    public static void eraseSavedInventory( EntityPlayer player )
+    {
+        getModNBT( player ).removeTag( SAVED_INVENTORY_NBT );
     }
 
     private static NBTTagCompound getModNBT( EntityPlayer player )

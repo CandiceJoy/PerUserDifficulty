@@ -28,7 +28,7 @@ public class SetDifficultyCommand extends CommandBase
 
     private static ChatComponentText setDifficulty( EntityPlayer player, PlayerDifficulty difficulty )
     {
-        PlayerDifficultyNBTHelper.setDifficultyLevel( player, difficulty );
+        NBTHelper.setDifficultyLevel( player, difficulty );
         return getReturnMessage( "Difficulty set to " + difficulty + "." );
     }
 
@@ -63,7 +63,7 @@ public class SetDifficultyCommand extends CommandBase
 
         if( params.length == 0 )
         {
-            return_message = getErrorMessage( "Your current difficulty is: " + PlayerDifficultyNBTHelper.getDifficultyLevel( player ) );
+            return_message = getErrorMessage( "Your current difficulty is: " + NBTHelper.getDifficultyLevel( player ) );
         }
         else if( params.length != 1 )
         {
@@ -132,7 +132,7 @@ public class SetDifficultyCommand extends CommandBase
                         }
                         else
                         {
-                            Long last_change = PlayerDifficultyNBTHelper.getLastChanged( player );
+                            Long last_change = NBTHelper.getLastChanged( player );
 
                             if( System.currentTimeMillis() < last_change + PerUserDifficultyMod.getMinimumTimeBetweenDifficultyChanges() )
                             {
