@@ -102,8 +102,8 @@ public class EventHandlers
             int food_level = food.func_150905_g( stack );
             double saturation_level = food.func_150906_h( stack );
 
-            int food_to_add = (int) Math.round( food_level * food_modifier );
-            float saturation_to_add = (float) ( saturation_level * saturation_modifier );
+            int food_to_add = (int) Math.round( food_level * ( food_modifier - 1.0 ) );
+            float saturation_to_add = (float) ( saturation_level * ( saturation_modifier - 1.0 ) );
 
             player.getFoodStats().addStats( food_to_add, saturation_to_add );
         }
