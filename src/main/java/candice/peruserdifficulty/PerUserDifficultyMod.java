@@ -49,6 +49,8 @@ public class PerUserDifficultyMod
 
         double[] damage_taken = new double[3];
         double[] damage_dealt = new double[3];
+        double[] food = new double[3];
+        double[] saturation = new double[3];
         PlayerDifficulty max_keepinventory = null;
 
         damage_taken[0] = config.get( "Damage Taken", "Easy", 0.75, "Multiplier as a decimal percentage" ).getDouble();
@@ -59,12 +61,20 @@ public class PerUserDifficultyMod
         damage_dealt[1] = config.get( "Damage Dealt", "Medium", 1.0 ).getDouble();
         damage_dealt[2] = config.get( "Damage Dealt", "Hard", 0.75 ).getDouble();
 
+        food[0] = config.get( "Food", "Easy", 0.5, "Bonus as a decimal percentage" ).getDouble();
+        food[1] = config.get( "Food", "Medium", 0.25 ).getDouble();
+        food[2] = config.get( "Food", "Hard", 0.0 ).getDouble();
+
+        saturation[0] = config.get( "Saturation", "Easy", 0.5, "Bonus as a decimal percentage" ).getDouble();
+        saturation[1] = config.get( "Saturation", "Medium", 0.25 ).getDouble();
+        saturation[2] = config.get( "Saturation", "Hard", 0.0 ).getDouble();
+
         max_keepinventory = PlayerDifficultyHelper.numberToDifficulty( config.get( "Keep Inventory", "KeepInventory", 1, "Max level for KeepInventory (1=easy, 2=med, 3=hard)" ).getInt() );
 
         time_between_difficulty_changes = config.get( "Rate Limits", "Time Between Difficulty Changes", 60, "Time in positive integer minutes; set 0 for no limit" ).getInt();
 
         config.save();
 
-        PlayerDifficultyHelper.setConfig( damage_taken, damage_dealt, max_keepinventory );
+        PlayerDifficultyHelper.setConfig( damage_taken, damage_dealt, food, saturation, max_keepinventory );
     }
 }

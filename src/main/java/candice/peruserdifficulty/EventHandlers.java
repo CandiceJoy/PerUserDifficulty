@@ -1,12 +1,16 @@
 package candice.peruserdifficulty;
+
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
+import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
 
 import java.util.ArrayList;
 
@@ -70,6 +74,38 @@ public class EventHandlers
                 event.drops.clear();
                 event.setCanceled( true );
             }
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = false)
+    public void onEvent( PlayerUseItemEvent.Finish event )
+    {
+        Entity entity = event.entity;
+
+        if( !( entity instanceof EntityPlayer ) )
+        {
+            return;
+        }
+
+        EntityPlayer player = (EntityPlayer) entity;
+        PlayerDifficulty difficulty = NBTHelper.getDifficultyLevel( player );
+
+        ItemStack stack = event.item;
+        Item item = stack.getItem();
+
+        if( item instanceof ItemFood )
+        {
+            ItemFood food = (ItemFood) item;
+
+            double food_modifier = PlayerDifficultyHelper.getFoodMultiplier( difficulty );
+            double saturation_modifier = PlayerDifficultyHelper.getSaturationMultiplier( difficulty );
+            int food_level = food.func_150905_g( stack );
+            double saturation_level = food.func_150906_h( stack );
+
+            int food_to_add = (int) Math.round( food_level * food_modifier );
+            float saturation_to_add = (float) ( saturation_level * saturation_modifier );
+
+            player.getFoodStats().addStats( food_to_add, saturation_to_add );
         }
     }
 }

@@ -7,17 +7,21 @@ public class PlayerDifficultyHelper
 {
     private static double[] damage_taken;
     private static double[] damage_dealt;
+    private static double[] food;
+    private static double[] saturation;
     private static PlayerDifficulty max_keepinventory;
 
-    public static void setConfig( double[] damage_taken_in, double[] damage_dealt_in, PlayerDifficulty max_keepinventory_in )
+    public static void setConfig( double[] damage_taken_in, double[] damage_dealt_in, double[] food_in, double[] saturation_in, PlayerDifficulty max_keepinventory_in )
     {
-        if( damage_taken_in.length != 3 || damage_dealt_in.length != 3 )
+        if( damage_taken_in.length != 3 || damage_dealt_in.length != 3 || food_in.length != 3 || saturation_in.length != 3 )
         {
             return;
         }
 
         damage_taken = damage_taken_in;
         damage_dealt = damage_dealt_in;
+        food = food_in;
+        saturation = saturation_in;
         max_keepinventory = max_keepinventory_in;
     }
 
@@ -103,6 +107,56 @@ public class PlayerDifficultyHelper
         }
 
         return damage_multiplier;
+    }
+
+    public static double getFoodMultiplier( PlayerDifficulty difficulty )
+    {
+        if( food == null || difficulty == PlayerDifficulty.DISABLED )
+        {
+            return 1.0;
+        }
+
+        double food_multiplier = 1.0;
+
+        switch( difficulty )
+        {
+            case EASY:
+                food_multiplier = food[0];
+                break;
+            case MEDIUM:
+                food_multiplier = food[1];
+                break;
+            case HARD:
+                food_multiplier = food[2];
+                break;
+        }
+
+        return food_multiplier;
+    }
+
+    public static double getSaturationMultiplier( PlayerDifficulty difficulty )
+    {
+        if( saturation == null || difficulty == PlayerDifficulty.DISABLED )
+        {
+            return 1.0;
+        }
+
+        double saturation_multiplier = 1.0;
+
+        switch( difficulty )
+        {
+            case EASY:
+                saturation_multiplier = food[0];
+                break;
+            case MEDIUM:
+                saturation_multiplier = food[1];
+                break;
+            case HARD:
+                saturation_multiplier = food[2];
+                break;
+        }
+
+        return saturation_multiplier;
     }
 
     public static boolean shouldDoKeepInventory( PlayerDifficulty difficulty )

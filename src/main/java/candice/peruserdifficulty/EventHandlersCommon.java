@@ -18,6 +18,7 @@ public class EventHandlersCommon
     {
         EntityPlayer player = event.player;
         ArrayList<ItemStack> items = NBTHelper.getSavedInventory( player );
+        NBTHelper.eraseSavedInventory( player );
 
         if( items != null && items.size() > 0 )
         {
@@ -27,7 +28,6 @@ public class EventHandlersCommon
             }
 
             items.clear();
-            NBTHelper.eraseSavedInventory( player );
         }
     }
 }
