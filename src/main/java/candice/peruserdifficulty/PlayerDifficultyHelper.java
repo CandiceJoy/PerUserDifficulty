@@ -1,5 +1,7 @@
 package candice.peruserdifficulty;
 
+import java.util.Arrays;
+
 /**
  * Created by Candice on 12/18/2014.
  */
@@ -27,35 +29,18 @@ public class PlayerDifficultyHelper
 
     public static int difficultyToNumber( PlayerDifficulty difficulty )
     {
-        switch( difficulty )
-        {
-            case DISABLED:
-                return 0;
-            case EASY:
-                return 1;
-            case MEDIUM:
-                return 2;
-            case HARD:
-                return 3;
-            default:
-                return -1;
-        }
+        return Arrays.binarySearch( PlayerDifficulty.values(), difficulty );
     }
 
     public static PlayerDifficulty numberToDifficulty( int difficulty )
     {
-        switch( difficulty )
+        if( difficulty < 0 || difficulty >= PlayerDifficulty.values().length )
         {
-            case 0:
-                return PlayerDifficulty.DISABLED;
-            case 1:
-                return PlayerDifficulty.EASY;
-            case 2:
-                return PlayerDifficulty.MEDIUM;
-            case 3:
-                return PlayerDifficulty.HARD;
-            default:
-                return null;
+            return null;
+        }
+        else
+        {
+            return PlayerDifficulty.values()[difficulty];
         }
     }
 
@@ -66,22 +51,7 @@ public class PlayerDifficultyHelper
             return 1.0;
         }
 
-        double damage_multiplier = 1.0;
-
-        switch( difficulty )
-        {
-            case EASY:
-                damage_multiplier = damage_taken[0];
-                break;
-            case MEDIUM:
-                damage_multiplier = damage_taken[1];
-                break;
-            case HARD:
-                damage_multiplier = damage_taken[2];
-                break;
-        }
-
-        return damage_multiplier;
+        return damage_taken[difficultyToNumber( difficulty ) - 1];
     }
 
     public static double getDamageDealtMultiplier( PlayerDifficulty difficulty )
@@ -91,22 +61,7 @@ public class PlayerDifficultyHelper
             return 1.0;
         }
 
-        double damage_multiplier = 1.0;
-
-        switch( difficulty )
-        {
-            case EASY:
-                damage_multiplier = damage_dealt[0];
-                break;
-            case MEDIUM:
-                damage_multiplier = damage_dealt[1];
-                break;
-            case HARD:
-                damage_multiplier = damage_dealt[2];
-                break;
-        }
-
-        return damage_multiplier;
+        return damage_dealt[difficultyToNumber( difficulty ) - 1];
     }
 
     public static double getFoodMultiplier( PlayerDifficulty difficulty )
@@ -116,22 +71,7 @@ public class PlayerDifficultyHelper
             return 1.0;
         }
 
-        double food_multiplier = 1.0;
-
-        switch( difficulty )
-        {
-            case EASY:
-                food_multiplier = food[0];
-                break;
-            case MEDIUM:
-                food_multiplier = food[1];
-                break;
-            case HARD:
-                food_multiplier = food[2];
-                break;
-        }
-
-        return food_multiplier;
+        return food[difficultyToNumber( difficulty ) - 1];
     }
 
     public static double getSaturationMultiplier( PlayerDifficulty difficulty )
@@ -141,22 +81,7 @@ public class PlayerDifficultyHelper
             return 1.0;
         }
 
-        double saturation_multiplier = 1.0;
-
-        switch( difficulty )
-        {
-            case EASY:
-                saturation_multiplier = food[0];
-                break;
-            case MEDIUM:
-                saturation_multiplier = food[1];
-                break;
-            case HARD:
-                saturation_multiplier = food[2];
-                break;
-        }
-
-        return saturation_multiplier;
+        return saturation[difficultyToNumber( difficulty ) - 1];
     }
 
     public static boolean shouldDoKeepInventory( PlayerDifficulty difficulty )
