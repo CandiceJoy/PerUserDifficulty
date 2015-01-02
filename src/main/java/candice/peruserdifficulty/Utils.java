@@ -5,16 +5,23 @@ package candice.peruserdifficulty;
  */
 public class Utils
 {
-    public static String minutesToTimeString( int minutes )
+    public static String secondsToTimeString( long seconds )
     {
-        if( minutes < 0 )
+        if( seconds < 0 )
         {
             return "";
         }
 
-        int days = 0;
-        int hours = 0;
+        long days = 0;
+        long hours = 0;
+        long minutes = 0;
         String output = "";
+
+        while( seconds / 60 >= 1 )
+        {
+            minutes++;
+            seconds -= 60;
+        }
 
         while( minutes / 60 >= 1 )
         {
@@ -30,19 +37,29 @@ public class Utils
 
         if( days > 0 )
         {
-            output += days + " day" + ( days > 1 ? "s" : "" ) + " ";
+            output += getTimeString( "day", days );
         }
 
         if( hours > 0 )
         {
-            output += hours + " hour" + ( hours > 1 ? "s" : "" ) + " ";
+            output += getTimeString( "hour", hours );
         }
 
         if( minutes > 0 )
         {
-            output += minutes + " minute" + ( minutes > 1 ? "s" : "" ) + " ";
+            output += getTimeString( "minute", minutes );
         }
 
-        return output;
+        if( seconds > 0 )
+        {
+            output += getTimeString( "second", seconds );
+        }
+
+        return output.trim();
+    }
+
+    private static String getTimeString( String unit, long value )
+    {
+        return value + " " + unit + ( value > 1 ? "s" : "" ) + " ";
     }
 }

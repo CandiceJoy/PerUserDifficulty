@@ -16,14 +16,15 @@ public class SetDifficultyCommand extends CommandBase
 {
     private static ChatComponentText getMessage( EnumChatFormatting color, String message )
     {
-        String color_string = color.toString();
-
         for( String word : message.split( " " ) )
         {
-            message = message.replaceAll( word, color_string + word );
+            if( !word.trim().equals( "" ) )
+            {
+                message = message.replaceAll( word, color + word );
+            }
         }
 
-        return new ChatComponentText( color + message );
+        return new ChatComponentText( message );
     }
 
     private static ChatComponentText getErrorMessage( String message )
@@ -175,7 +176,7 @@ public class SetDifficultyCommand extends CommandBase
 
                             if( current_time < next_change_time )
                             {
-                                return_message = getErrorMessage( "You must wait " + Utils.minutesToTimeString( (int) Math.round( (double) ( next_change_time - current_time ) / 60000.0 ) ) + "before changing your difficulty again." );
+                                return_message = getErrorMessage( "You must wait " + Utils.secondsToTimeString( Math.round( (double) ( next_change_time - current_time ) / 1000.0 ) ) + " before changing your difficulty again." );
                             }
                             else
                             {
