@@ -44,7 +44,7 @@ public class EventHandlers
         }
     }
 
-    @SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
+    @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = false)
     public void onEvent( PlayerDropsEvent event )
     {
         Entity entity = event.entity;
@@ -101,7 +101,6 @@ public class EventHandlers
             double saturation_modifier = PlayerDifficultyHelper.getSaturationMultiplier( difficulty );
             int food_level = food.func_150905_g( stack );
             double saturation_level = food.func_150906_h( stack );
-
             int food_to_add = (int) Math.round( food_level * ( food_modifier - 1.0 ) );
             float saturation_to_add = (float) ( saturation_level * ( saturation_modifier - 1.0 ) );
 

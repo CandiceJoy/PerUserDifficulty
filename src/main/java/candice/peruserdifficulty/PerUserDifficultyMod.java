@@ -21,11 +21,20 @@ public class PerUserDifficultyMod
     public static final String MODID = "CandisPerUserDifficulty";
     public static final String VERSION = "0.3";
 
-    private static int time_between_difficulty_changes = 0;
+    private static long time_between_difficulty_changes = 0;
 
     public static long getMinimumTimeBetweenDifficultyChanges()
     {
-        return time_between_difficulty_changes * 60 * 1000;
+        long min_time = time_between_difficulty_changes * 60l * 1000l;
+
+        if( min_time >= 0 )
+        {
+            return time_between_difficulty_changes * 60l * 1000l;
+        }
+        else
+        {
+            return 0;
+        }
     }
 
     @Mod.EventHandler
@@ -71,7 +80,7 @@ public class PerUserDifficultyMod
 
         max_keepinventory = PlayerDifficultyHelper.numberToDifficulty( config.get( "Keep Inventory", "KeepInventory", 1, "Max level for KeepInventory (1=easy, 2=med, 3=hard)" ).getInt() );
 
-        time_between_difficulty_changes = config.get( "Rate Limits", "Time Between Difficulty Changes", 60, "Time in positive integer minutes; set 0 for no limit" ).getInt();
+        time_between_difficulty_changes = config.get( "Rate Limits", "Time Between Difficulty Changes", 60, "Time in positive integer minutes (max 2147483647); set 0 for no limit" ).getInt();
 
         config.save();
 

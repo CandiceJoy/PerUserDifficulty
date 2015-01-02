@@ -6,6 +6,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Candice on 12/18/2014.
  */
@@ -13,6 +16,13 @@ public class SetDifficultyCommand extends CommandBase
 {
     private static ChatComponentText getMessage( EnumChatFormatting color, String message )
     {
+        String color_string = color.toString();
+
+        for( String word : message.split( " " ) )
+        {
+            message = message.replaceAll( word, color_string + word );
+        }
+
         return new ChatComponentText( color + message );
     }
 
@@ -28,8 +38,35 @@ public class SetDifficultyCommand extends CommandBase
 
     private static ChatComponentText setDifficulty( EntityPlayer player, PlayerDifficulty difficulty )
     {
+        if( difficulty == NBTHelper.getDifficultyLevel( player ) )
+        {
+            return getErrorMessage( "You cannot set your difficulty level to the same difficulty." );
+        }
+
         NBTHelper.setDifficultyLevel( player, difficulty );
         return getReturnMessage( "Difficulty set to " + difficulty + "." );
+    }
+
+    @Override
+    public List addTabCompletionOptions( ICommandSender icommandsender, String[] params )
+    {
+        ArrayList<String> tab_completion_matches = new ArrayList<String>();
+        String tab_completion_candidate = params[params.length - 1].toLowerCase().trim();
+
+        addToListIfMatches( "easy", tab_completion_candidate, tab_completion_matches );
+        addToListIfMatches( "medium", tab_completion_candidate, tab_completion_matches );
+        addToListIfMatches( "hard", tab_completion_candidate, tab_completion_matches );
+        addToListIfMatches( "disabled", tab_completion_candidate, tab_completion_matches );
+
+        return tab_completion_matches;
+    }
+
+    private void addToListIfMatches( String full_word, String tab_completion_candidate, ArrayList<String> tab_completion_matches )
+    {
+        if( full_word.indexOf( tab_completion_candidate ) == 0 )
+        {
+            tab_completion_matches.add( full_word );
+        }
     }
 
     @Override
@@ -132,11 +169,13 @@ public class SetDifficultyCommand extends CommandBase
                         }
                         else
                         {
+                            Long current_time = System.currentTimeMillis();
                             Long last_change = NBTHelper.getLastChanged( player );
+                            Long next_change_time = last_change + PerUserDifficultyMod.getMinimumTimeBetweenDifficultyChanges();
 
-                            if( System.currentTimeMillis() < last_change + PerUserDifficultyMod.getMinimumTimeBetweenDifficultyChanges() )
+                            if( current_time < next_change_time )
                             {
-                                return_message = getErrorMessage( "You must wait longer before changing your difficulty again." );
+                                return_message = getErrorMessage( "You must wait " + Utils.minutesToTimeString( (int) Math.round( (double) ( next_change_time - current_time ) / 60000.0 ) ) + "before changing your difficulty again." );
                             }
                             else
                             {
