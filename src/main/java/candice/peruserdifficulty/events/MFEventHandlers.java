@@ -1,5 +1,8 @@
-package candice.peruserdifficulty;
+package candice.peruserdifficulty.events;
 
+import candice.peruserdifficulty.NBTHelper;
+import candice.peruserdifficulty.PlayerDifficulty;
+import candice.peruserdifficulty.PlayerDifficultyHelper;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.Entity;
@@ -14,7 +17,7 @@ import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
 
 import java.util.ArrayList;
 
-public class EventHandlers
+public class MFEventHandlers
 {
     @SubscribeEvent(priority = EventPriority.HIGH, receiveCanceled = false)
     public void onEvent( LivingHurtEvent event )

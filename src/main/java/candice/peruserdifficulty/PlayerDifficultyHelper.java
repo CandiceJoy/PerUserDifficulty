@@ -27,6 +27,31 @@ public class PlayerDifficultyHelper
         max_keepinventory = max_keepinventory_in;
     }
 
+    public static PlayerDifficulty stringToDifficulty( String difficulty_string )
+    {
+        PlayerDifficulty difficulty = null;
+        difficulty_string = difficulty_string.toLowerCase().trim();
+
+        if( difficulty_string.equals( "disabled" ) )
+        {
+            difficulty = PlayerDifficulty.DISABLED;
+        }
+        else if( difficulty_string.equals( "easy" ) )
+        {
+            difficulty = PlayerDifficulty.EASY;
+        }
+        else if( difficulty_string.equals( "medium" ) || difficulty_string.equals( "med" ) )
+        {
+            difficulty = PlayerDifficulty.MEDIUM;
+        }
+        else if( difficulty_string.equals( "hard" ) )
+        {
+            difficulty = PlayerDifficulty.HARD;
+        }
+
+        return difficulty;
+    }
+
     public static int difficultyToNumber( PlayerDifficulty difficulty )
     {
         return Arrays.binarySearch( PlayerDifficulty.values(), difficulty );

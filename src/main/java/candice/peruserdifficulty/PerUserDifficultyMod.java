@@ -1,5 +1,9 @@
 package candice.peruserdifficulty;
 
+import candice.peruserdifficulty.commands.AdminSetDifficultyCommand;
+import candice.peruserdifficulty.commands.SetDifficultyCommand;
+import candice.peruserdifficulty.events.FMLEventHandlers;
+import candice.peruserdifficulty.events.MFEventHandlers;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -40,14 +44,15 @@ public class PerUserDifficultyMod
     @Mod.EventHandler
     public void init( FMLInitializationEvent event )
     {
-        MinecraftForge.EVENT_BUS.register( new EventHandlers() );
-        FMLCommonHandler.instance().bus().register( new EventHandlersCommon() );
+        MinecraftForge.EVENT_BUS.register( new MFEventHandlers() );
+        FMLCommonHandler.instance().bus().register( new FMLEventHandlers() );
     }
 
     @EventHandler
     public void serverLoad( FMLServerStartingEvent event )
     {
         event.registerServerCommand( new SetDifficultyCommand() );
+        event.registerServerCommand( new AdminSetDifficultyCommand() );
     }
 
     @Mod.EventHandler

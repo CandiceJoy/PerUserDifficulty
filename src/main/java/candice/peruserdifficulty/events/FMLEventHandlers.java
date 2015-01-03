@@ -1,5 +1,6 @@
-package candice.peruserdifficulty;
+package candice.peruserdifficulty.events;
 
+import candice.peruserdifficulty.NBTHelper;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 /**
  * Created by Candice on 12/26/2014.
  */
-public class EventHandlersCommon
+public class FMLEventHandlers
 {
     @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = false)
     public void onEvent( PlayerEvent.PlayerRespawnEvent event )
