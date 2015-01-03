@@ -16,9 +16,6 @@ import net.minecraft.util.ChatComponentText;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Candice on 12/18/2014.
- */
 public class AdminSetDifficultyCommand extends CommandBase
 {
     @Override
