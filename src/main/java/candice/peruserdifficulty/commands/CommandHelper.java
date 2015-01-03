@@ -10,7 +10,7 @@ import java.util.ArrayList;
  */
 public class CommandHelper
 {
-    public static ChatComponentText getMessage( EnumChatFormatting color, String message )
+    private static ChatComponentText getMessage( EnumChatFormatting color, String message )
     {
         for( String word : message.split( " " ) )
         {

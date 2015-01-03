@@ -112,6 +112,7 @@ public class AdminSetDifficultyCommand extends CommandBase
                         {
                             NBTHelper.setDifficultyLevel( target_player, difficulty );
                             return_message = CommandHelper.getReturnMessage( "The difficulty level for " + target_player.getDisplayName() + " is now set to " + difficulty + "." );
+                            target_player.addChatComponentMessage( CommandHelper.getReturnMessage( requesting_player.getDisplayName() + " has set your difficulty to " + difficulty + "." ) );
                         }
                     }
                 }
