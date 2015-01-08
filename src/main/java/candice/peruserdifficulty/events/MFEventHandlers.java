@@ -1,8 +1,9 @@
 package candice.peruserdifficulty.events;
 
-import candice.peruserdifficulty.NBTHelper;
-import candice.peruserdifficulty.PlayerDifficulty;
-import candice.peruserdifficulty.PlayerDifficultyHelper;
+import candice.peruserdifficulty.enums.PlayerDifficulty;
+import candice.peruserdifficulty.helpers.Location;
+import candice.peruserdifficulty.helpers.NBTHelper;
+import candice.peruserdifficulty.helpers.PlayerDifficultyHelper;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.Entity;
@@ -11,6 +12,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
@@ -108,6 +110,26 @@ public class MFEventHandlers
             float saturation_to_add = (float) ( saturation_level * ( saturation_modifier - 1.0 ) );
 
             player.getFoodStats().addStats( food_to_add, saturation_to_add );
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = false)
+    public void onLivingDeath( LivingDeathEvent event )
+    {
+        Entity entity = event.entity;
+
+        if( !( entity instanceof EntityPlayer ) )
+        {
+            return;
+        }
+
+        EntityPlayer player = (EntityPlayer) entity;
+        PlayerDifficulty difficulty = NBTHelper.getDifficultyLevel( player );
+
+        if( PlayerDifficultyHelper.shouldAllowBackCommand( difficulty ) )
+        {
+            Location location = new Location( player.dimension, player.posX, player.posY, player.posZ );
+            NBTHelper.setBackLocation( player, location );
         }
     }
 }

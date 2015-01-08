@@ -4,9 +4,9 @@ package candice.peruserdifficulty.commands;
  * Created by Candice on 1/2/2015.
  */
 
-import candice.peruserdifficulty.NBTHelper;
-import candice.peruserdifficulty.PlayerDifficulty;
-import candice.peruserdifficulty.PlayerDifficultyHelper;
+import candice.peruserdifficulty.enums.PlayerDifficulty;
+import candice.peruserdifficulty.helpers.NBTHelper;
+import candice.peruserdifficulty.helpers.PlayerDifficultyHelper;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;

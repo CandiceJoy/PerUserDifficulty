@@ -1,4 +1,4 @@
-package candice.peruserdifficulty;
+package candice.peruserdifficulty.enums;
 
 /**
  * Created by Candice on 12/18/2014.

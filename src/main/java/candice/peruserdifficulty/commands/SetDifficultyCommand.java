@@ -1,6 +1,10 @@
 package candice.peruserdifficulty.commands;
 
-import candice.peruserdifficulty.*;
+import candice.peruserdifficulty.PerUserDifficultyMod;
+import candice.peruserdifficulty.enums.PlayerDifficulty;
+import candice.peruserdifficulty.helpers.NBTHelper;
+import candice.peruserdifficulty.helpers.PlayerDifficultyHelper;
+import candice.peruserdifficulty.helpers.Utils;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;

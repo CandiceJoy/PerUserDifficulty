@@ -10,6 +10,8 @@ import java.util.ArrayList;
  */
 public class CommandHelper
 {
+    public static final String NO_PERMISSION = "Your difficulty level does not permit the use of this command.";
+
     private static ChatComponentText getMessage( EnumChatFormatting color, String message )
     {
         for( String word : message.split( " " ) )

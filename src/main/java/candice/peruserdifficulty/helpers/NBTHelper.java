@@ -1,5 +1,6 @@
-package candice.peruserdifficulty;
+package candice.peruserdifficulty.helpers;
 
+import candice.peruserdifficulty.enums.PlayerDifficulty;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -19,11 +20,12 @@ public class NBTHelper
     public static final String LAST_CHANGED_NBT = "last-changed";
     public static final String SAVED_INVENTORY_NBT = "saved-inventory";
     public static final String HOME_LOCATION_NBT = "home-location";
+    public static final String BACK_LOCATION_NBT = "back-location";
 
-    private static final String HOME_DIMENSION = "dim";
-    private static final String HOME_X = "x";
-    private static final String HOME_Y = "y";
-    private static final String HOME_Z = "z";
+    public static final String DIMENSION_NBT = "dim";
+    public static final String X_NBT = "x";
+    public static final String Y_NBT = "y";
+    public static final String Z_NBT = "z";
 
     public static PlayerDifficulty getDifficultyLevel( EntityPlayer player )
     {
@@ -79,7 +81,45 @@ public class NBTHelper
         getModNBT( player ).removeTag( SAVED_INVENTORY_NBT );
     }
 
-    public static void setHomeLocation( EntityPlayer player, int dimension, double x, double y, double z )
+    public static void setBackLocation( EntityPlayer player, Location location )
+    {
+        NBTTagCompound compound = null;
+
+        if( getModNBT( player ).hasKey( BACK_LOCATION_NBT ) )
+        {
+            compound = getModNBT( player ).getCompoundTag( BACK_LOCATION_NBT );
+        }
+        else
+        {
+            compound = new NBTTagCompound();
+            getModNBT( player ).setTag( BACK_LOCATION_NBT, compound );
+        }
+
+        location.writeToNBT( compound );
+    }
+
+    public static Location getBackLocation( EntityPlayer player )
+    {
+        NBTTagCompound compound = null;
+
+        if( getModNBT( player ).hasKey( BACK_LOCATION_NBT ) )
+        {
+            compound = getModNBT( player ).getCompoundTag( BACK_LOCATION_NBT );
+        }
+        else
+        {
+            return null;
+        }
+
+        return Location.readFromNBT( compound );
+    }
+
+    public static void eraseBackLocation( EntityPlayer player )
+    {
+        getModNBT( player ).setTag( BACK_LOCATION_NBT, new NBTTagCompound() );
+    }
+
+    public static void setHomeLocation( EntityPlayer player, Location location )
     {
         NBTTagList list = null;
 
@@ -98,13 +138,11 @@ public class NBTHelper
         for( int i = 0; i < list.tagCount(); i++ )
         {
             NBTTagCompound compound = list.getCompoundTagAt( i );
-            int current_dimension = compound.getInteger( HOME_DIMENSION );
+            int current_dimension = compound.getInteger( DIMENSION_NBT );
 
-            if( current_dimension == dimension )
+            if( current_dimension == location.getDimension() )
             {
-                compound.setDouble( HOME_X, x );
-                compound.setDouble( HOME_Y, y );
-                compound.setDouble( HOME_Z, z );
+                location.writeToNBT( compound );
 
                 home_has_been_set = true;
                 break;
@@ -114,19 +152,14 @@ public class NBTHelper
         if( !home_has_been_set )
         {
             NBTTagCompound compound = new NBTTagCompound();
-
-            compound.setInteger( HOME_DIMENSION, dimension );
-            compound.setDouble( HOME_X, x );
-            compound.setDouble( HOME_Y, y );
-            compound.setDouble( HOME_Z, z );
-
+            location.writeToNBT( compound );
             list.appendTag( compound );
         }
     }
 
-    public static double[] getHomeLocation( EntityPlayer player, int dimension )
+    public static Location getHomeLocation( EntityPlayer player, int dimension )
     {
-        double[] home_location = null;
+        Location home_location = null;
         NBTTagList list = null;
 
         if( getModNBT( player ).hasKey( HOME_LOCATION_NBT ) )
@@ -135,22 +168,17 @@ public class NBTHelper
         }
         else
         {
-            list = new NBTTagList();
-            getModNBT( player ).setTag( HOME_LOCATION_NBT, list );
+            return null;
         }
 
         for( int i = 0; i < list.tagCount(); i++ )
         {
             NBTTagCompound compound = list.getCompoundTagAt( i );
-            int current_dimension = compound.getInteger( HOME_DIMENSION );
+            int current_dimension = compound.getInteger( DIMENSION_NBT );
 
             if( current_dimension == dimension )
             {
-                double x = compound.getDouble( HOME_X );
-                double y = compound.getDouble( HOME_Y );
-                double z = compound.getDouble( HOME_Z );
-
-                home_location = new double[]{x, y, z};
+                home_location = Location.readFromNBT( compound );
                 break;
             }
         }

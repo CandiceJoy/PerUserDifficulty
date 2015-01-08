@@ -1,6 +1,6 @@
 package candice.peruserdifficulty.events;
 
-import candice.peruserdifficulty.NBTHelper;
+import candice.peruserdifficulty.helpers.NBTHelper;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;

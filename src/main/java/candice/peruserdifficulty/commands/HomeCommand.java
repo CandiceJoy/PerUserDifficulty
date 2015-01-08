@@ -1,6 +1,9 @@
 package candice.peruserdifficulty.commands;
 
-import candice.peruserdifficulty.NBTHelper;
+import candice.peruserdifficulty.enums.PlayerDifficulty;
+import candice.peruserdifficulty.helpers.Location;
+import candice.peruserdifficulty.helpers.NBTHelper;
+import candice.peruserdifficulty.helpers.PlayerDifficultyHelper;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
@@ -58,25 +61,25 @@ public class HomeCommand extends CommandBase
         }
 
         EntityPlayer player = (EntityPlayer) sender;
+        PlayerDifficulty difficulty = NBTHelper.getDifficultyLevel( player );
         ChatComponentText return_message = null;
 
-        if( params.length == 0 )
+        if( !PlayerDifficultyHelper.shouldAllowHomeCommand( difficulty ) )
+        {
+            return_message = CommandHelper.getErrorMessage( CommandHelper.NO_PERMISSION );
+        }
+        else if( params.length == 0 )
         {
             int dimension = player.dimension;
-            double[] location = NBTHelper.getHomeLocation( player, dimension );
+            Location location = NBTHelper.getHomeLocation( player, dimension );
 
-            if( location != null && location.length == 3 )
+            if( location != null )
             {
-                double x = location[0];
-                double y = location[1];
-                double z = location[2];
+                double x = location.getX();
+                double y = location.getY();
+                double z = location.getZ();
 
-                System.out.println( "X: " + x );
-                System.out.println( "Y: " + y );
-                System.out.println( "Z: " + z );
-
-                //player.setPosition( x, y, z );
-                player.setPositionAndUpdate( x, y, z );
+                location.sendPlayerTo( player );
             }
             else
             {
@@ -92,7 +95,7 @@ public class HomeCommand extends CommandBase
                 double y = player.posY;
                 double z = player.posZ;
 
-                NBTHelper.setHomeLocation( player, dimension, x, y, z );
+                NBTHelper.setHomeLocation( player, new Location( dimension, x, y, z ) );
                 return_message = CommandHelper.getReturnMessage( "Home location set." );
             }
             else

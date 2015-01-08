@@ -1,10 +1,13 @@
 package candice.peruserdifficulty;
 
 import candice.peruserdifficulty.commands.AdminSetDifficultyCommand;
+import candice.peruserdifficulty.commands.BackCommand;
 import candice.peruserdifficulty.commands.HomeCommand;
 import candice.peruserdifficulty.commands.SetDifficultyCommand;
+import candice.peruserdifficulty.enums.PlayerDifficulty;
 import candice.peruserdifficulty.events.FMLEventHandlers;
 import candice.peruserdifficulty.events.MFEventHandlers;
+import candice.peruserdifficulty.helpers.PlayerDifficultyHelper;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -55,6 +58,7 @@ public class PerUserDifficultyMod
         event.registerServerCommand( new SetDifficultyCommand() );
         event.registerServerCommand( new AdminSetDifficultyCommand() );
         event.registerServerCommand( new HomeCommand() );
+        event.registerServerCommand( new BackCommand() );
     }
 
     @Mod.EventHandler
@@ -68,6 +72,8 @@ public class PerUserDifficultyMod
         double[] food = new double[3];
         double[] saturation = new double[3];
         PlayerDifficulty max_keepinventory = null;
+        PlayerDifficulty max_home = null;
+        PlayerDifficulty max_back = null;
 
         damage_taken[0] = config.get( "Damage Taken", "Easy", 0.75, "Multiplier as a decimal percentage" ).getDouble();
         damage_taken[1] = config.get( "Damage Taken", "Medium", 1.0 ).getDouble();
@@ -85,12 +91,14 @@ public class PerUserDifficultyMod
         saturation[1] = config.get( "Saturation", "Medium", 1.0 ).getDouble();
         saturation[2] = config.get( "Saturation", "Hard", 0.75 ).getDouble();
 
-        max_keepinventory = PlayerDifficultyHelper.numberToDifficulty( config.get( "Keep Inventory", "KeepInventory", 1, "Max level for KeepInventory (1=easy, 2=med, 3=hard)" ).getInt() );
+        max_keepinventory = PlayerDifficultyHelper.numberToDifficulty( config.get( "Keep Inventory", "KeepInventory", 1, "Max difficulty level for KeepInventory (0=disabled, 1=easy, 2=med, 3=hard)" ).getInt() );
+        max_home = PlayerDifficultyHelper.numberToDifficulty( config.get( "Location", "Home", 3, "Max difficulty level for /home (0=disabled,1=easy, 2=med, 3=hard)" ).getInt() );
+        max_back = PlayerDifficultyHelper.numberToDifficulty( config.get( "Location", "Back", 2, "Max difficulty level for /back (0=disabled,1=easy, 2=med, 3=hard)" ).getInt() );
 
         time_between_difficulty_changes = config.get( "Rate Limits", "Time Between Difficulty Changes", 60, "Time in positive integer minutes (max 2147483647); set 0 for no limit" ).getInt();
 
         config.save();
 
-        PlayerDifficultyHelper.setConfig( damage_taken, damage_dealt, food, saturation, max_keepinventory );
+        PlayerDifficultyHelper.setConfig( damage_taken, damage_dealt, food, saturation, max_keepinventory, max_home, max_back );
     }
 }

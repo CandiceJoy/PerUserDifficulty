@@ -1,4 +1,4 @@
-package candice.peruserdifficulty;
+package candice.peruserdifficulty.helpers;
 
 /**
  * Created by Candice on 1/2/2015.
