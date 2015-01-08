@@ -35,6 +35,12 @@ public class HomeCommand extends CommandBase
     }
 
     @Override
+    public boolean canCommandSenderUseCommand( ICommandSender sender )
+    {
+        return true;
+    }
+
+    @Override
     public String getCommandName()
     {
         return "home";
@@ -64,7 +70,7 @@ public class HomeCommand extends CommandBase
         PlayerDifficulty difficulty = NBTHelper.getDifficultyLevel( player );
         ChatComponentText return_message = null;
 
-        if( !PlayerDifficultyHelper.shouldAllowHomeCommand( difficulty ) )
+        if( !PlayerDifficultyHelper.shouldAllowHomeCommand( difficulty ) && difficulty != PlayerDifficulty.DISABLED )
         {
             return_message = CommandHelper.getErrorMessage( CommandHelper.NO_PERMISSION );
         }

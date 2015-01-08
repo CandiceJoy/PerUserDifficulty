@@ -33,6 +33,12 @@ public class BackCommand extends CommandBase
     }
 
     @Override
+    public boolean canCommandSenderUseCommand( ICommandSender sender )
+    {
+        return true;
+    }
+
+    @Override
     public void processCommand( ICommandSender sender, String[] params )
     {
         if( !( sender instanceof EntityPlayer ) )
@@ -44,7 +50,7 @@ public class BackCommand extends CommandBase
         PlayerDifficulty difficulty = NBTHelper.getDifficultyLevel( player );
         ChatComponentText return_message = null;
 
-        if( !PlayerDifficultyHelper.shouldAllowBackCommand( difficulty ) )
+        if( !PlayerDifficultyHelper.shouldAllowBackCommand( difficulty ) && difficulty != PlayerDifficulty.DISABLED )
         {
             return_message = CommandHelper.getErrorMessage( CommandHelper.NO_PERMISSION );
         }

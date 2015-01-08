@@ -55,6 +55,12 @@ public class SetDifficultyCommand extends CommandBase
     }
 
     @Override
+    public boolean canCommandSenderUseCommand( ICommandSender sender )
+    {
+        return true;
+    }
+
+    @Override
     public void processCommand( ICommandSender sender, String[] params )
     {
         if( !( sender instanceof EntityPlayer ) )
