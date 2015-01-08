@@ -18,6 +18,12 @@ public class NBTHelper
     public static final String DIFFICULTY_NBT = "difficulty";
     public static final String LAST_CHANGED_NBT = "last-changed";
     public static final String SAVED_INVENTORY_NBT = "saved-inventory";
+    public static final String HOME_LOCATION_NBT = "home-location";
+
+    private static final String HOME_DIMENSION = "dim";
+    private static final String HOME_X = "x";
+    private static final String HOME_Y = "y";
+    private static final String HOME_Z = "z";
 
     public static PlayerDifficulty getDifficultyLevel( EntityPlayer player )
     {
@@ -71,6 +77,85 @@ public class NBTHelper
     public static void eraseSavedInventory( EntityPlayer player )
     {
         getModNBT( player ).removeTag( SAVED_INVENTORY_NBT );
+    }
+
+    public static void setHomeLocation( EntityPlayer player, int dimension, double x, double y, double z )
+    {
+        NBTTagList list = null;
+
+        if( getModNBT( player ).hasKey( HOME_LOCATION_NBT ) )
+        {
+            list = getModNBT( player ).getTagList( HOME_LOCATION_NBT, Constants.NBT.TAG_COMPOUND );
+        }
+        else
+        {
+            list = new NBTTagList();
+            getModNBT( player ).setTag( HOME_LOCATION_NBT, list );
+        }
+
+        boolean home_has_been_set = false;
+
+        for( int i = 0; i < list.tagCount(); i++ )
+        {
+            NBTTagCompound compound = list.getCompoundTagAt( i );
+            int current_dimension = compound.getInteger( HOME_DIMENSION );
+
+            if( current_dimension == dimension )
+            {
+                compound.setDouble( HOME_X, x );
+                compound.setDouble( HOME_Y, y );
+                compound.setDouble( HOME_Z, z );
+
+                home_has_been_set = true;
+                break;
+            }
+        }
+
+        if( !home_has_been_set )
+        {
+            NBTTagCompound compound = new NBTTagCompound();
+
+            compound.setInteger( HOME_DIMENSION, dimension );
+            compound.setDouble( HOME_X, x );
+            compound.setDouble( HOME_Y, y );
+            compound.setDouble( HOME_Z, z );
+
+            list.appendTag( compound );
+        }
+    }
+
+    public static double[] getHomeLocation( EntityPlayer player, int dimension )
+    {
+        double[] home_location = null;
+        NBTTagList list = null;
+
+        if( getModNBT( player ).hasKey( HOME_LOCATION_NBT ) )
+        {
+            list = getModNBT( player ).getTagList( HOME_LOCATION_NBT, Constants.NBT.TAG_COMPOUND );
+        }
+        else
+        {
+            list = new NBTTagList();
+            getModNBT( player ).setTag( HOME_LOCATION_NBT, list );
+        }
+
+        for( int i = 0; i < list.tagCount(); i++ )
+        {
+            NBTTagCompound compound = list.getCompoundTagAt( i );
+            int current_dimension = compound.getInteger( HOME_DIMENSION );
+
+            if( current_dimension == dimension )
+            {
+                double x = compound.getDouble( HOME_X );
+                double y = compound.getDouble( HOME_Y );
+                double z = compound.getDouble( HOME_Z );
+
+                home_location = new double[]{x, y, z};
+                break;
+            }
+        }
+
+        return home_location;
     }
 
     private static NBTTagCompound getModNBT( EntityPlayer player )

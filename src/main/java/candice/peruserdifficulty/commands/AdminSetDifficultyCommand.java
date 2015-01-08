@@ -38,10 +38,6 @@ public class AdminSetDifficultyCommand extends CommandBase
             CommandHelper.addToListIfMatches( "hard", tab_completion_candidate, tab_completion_matches );
             CommandHelper.addToListIfMatches( "disabled", tab_completion_candidate, tab_completion_matches );
         }
-        else
-        {
-            return tab_completion_matches;
-        }
 
         return tab_completion_matches;
     }

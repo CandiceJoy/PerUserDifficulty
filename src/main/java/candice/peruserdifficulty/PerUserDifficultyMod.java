@@ -1,6 +1,7 @@
 package candice.peruserdifficulty;
 
 import candice.peruserdifficulty.commands.AdminSetDifficultyCommand;
+import candice.peruserdifficulty.commands.HomeCommand;
 import candice.peruserdifficulty.commands.SetDifficultyCommand;
 import candice.peruserdifficulty.events.FMLEventHandlers;
 import candice.peruserdifficulty.events.MFEventHandlers;
@@ -53,6 +54,7 @@ public class PerUserDifficultyMod
     {
         event.registerServerCommand( new SetDifficultyCommand() );
         event.registerServerCommand( new AdminSetDifficultyCommand() );
+        event.registerServerCommand( new HomeCommand() );
     }
 
     @Mod.EventHandler
