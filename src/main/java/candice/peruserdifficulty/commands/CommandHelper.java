@@ -14,15 +14,30 @@ public class CommandHelper
 
     private static ChatComponentText getMessage( EnumChatFormatting color, String message )
     {
-        for( String word : message.split( " " ) )
+        ArrayList<Integer> word_beginning_indexes = new ArrayList<Integer>();
+
+        char current = ' ';
+        char previous = ' ';
+
+        for( int x = 0; x < message.length(); x++ )
         {
-            if( !word.trim().equals( "" ) )
+            previous = current;
+            current = message.charAt( x );
+
+            if( previous == ' ' && current != ' ' )
             {
-                message = message.replaceAll( word, color + word );
+                word_beginning_indexes.add( x );
             }
         }
 
-        return new ChatComponentText( message );
+        StringBuffer buffer = new StringBuffer( message );
+
+        for( int x = word_beginning_indexes.size() - 1; x >= 0; x-- )
+        {
+            buffer.insert( word_beginning_indexes.get( x ), color );
+        }
+
+        return new ChatComponentText( buffer.toString() );
     }
 
     public static ChatComponentText getErrorMessage( String message )

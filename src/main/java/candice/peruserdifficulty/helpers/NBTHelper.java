@@ -116,7 +116,7 @@ public class NBTHelper
 
     public static void eraseBackLocation( EntityPlayer player )
     {
-        getModNBT( player ).setTag( BACK_LOCATION_NBT, new NBTTagCompound() );
+        getModNBT( player ).removeTag( BACK_LOCATION_NBT );
     }
 
     public static void setHomeLocation( EntityPlayer player, Location location )
