@@ -1,9 +1,6 @@
 package candice.peruserdifficulty;
 
-import candice.peruserdifficulty.commands.AdminSetDifficultyCommand;
-import candice.peruserdifficulty.commands.BackCommand;
-import candice.peruserdifficulty.commands.HomeCommand;
-import candice.peruserdifficulty.commands.SetDifficultyCommand;
+import candice.peruserdifficulty.commands.*;
 import candice.peruserdifficulty.enums.PlayerDifficulty;
 import candice.peruserdifficulty.events.FMLEventHandlers;
 import candice.peruserdifficulty.events.MFEventHandlers;
@@ -59,6 +56,7 @@ public class PerUserDifficultyMod
         event.registerServerCommand( new AdminSetDifficultyCommand() );
         event.registerServerCommand( new HomeCommand() );
         event.registerServerCommand( new BackCommand() );
+        event.registerServerCommand( new SpawnCommand() );
     }
 
     @Mod.EventHandler
@@ -74,6 +72,7 @@ public class PerUserDifficultyMod
         PlayerDifficulty max_keepinventory = null;
         PlayerDifficulty max_home = null;
         PlayerDifficulty max_back = null;
+        PlayerDifficulty max_spawn = null;
 
         damage_taken[0] = config.get( "Damage Taken", "Easy", 0.75, "Multiplier as a decimal percentage" ).getDouble();
         damage_taken[1] = config.get( "Damage Taken", "Medium", 1.0 ).getDouble();
@@ -94,11 +93,12 @@ public class PerUserDifficultyMod
         max_keepinventory = PlayerDifficultyHelper.numberToDifficulty( config.get( "Keep Inventory", "KeepInventory", 1, "Max difficulty level for KeepInventory (0=disabled, 1=easy, 2=med, 3=hard)" ).getInt() );
         max_home = PlayerDifficultyHelper.numberToDifficulty( config.get( "Location", "Home", 3, "Max difficulty level for /home (0=disabled,1=easy, 2=med, 3=hard)" ).getInt() );
         max_back = PlayerDifficultyHelper.numberToDifficulty( config.get( "Location", "Back", 2, "Max difficulty level for /back (0=disabled,1=easy, 2=med, 3=hard)" ).getInt() );
+        max_spawn = PlayerDifficultyHelper.numberToDifficulty( config.get( "Location", "Spawn", 2, "Max difficulty level for /spawn (0=disabled,1=easy,2=med,3=hard" ).getInt() );
 
         time_between_difficulty_changes = config.get( "Rate Limits", "Time Between Difficulty Changes", 60, "Time in positive integer minutes (max 2147483647); set 0 for no limit" ).getInt();
 
         config.save();
 
-        PlayerDifficultyHelper.setConfig( damage_taken, damage_dealt, food, saturation, max_keepinventory, max_home, max_back );
+        PlayerDifficultyHelper.setConfig( damage_taken, damage_dealt, food, saturation, max_keepinventory, max_home, max_back, max_spawn );
     }
 }

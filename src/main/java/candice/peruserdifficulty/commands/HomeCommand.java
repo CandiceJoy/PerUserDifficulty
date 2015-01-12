@@ -55,7 +55,7 @@ public class HomeCommand extends CommandBase
     @Override
     public String getCommandUsage( ICommandSender sender )
     {
-        return "/home <set>";
+        return "/home <set|dimension>";
     }
 
     @Override
@@ -106,7 +106,35 @@ public class HomeCommand extends CommandBase
             }
             else
             {
-                return_message = CommandHelper.getErrorMessage( "Correct usage is " + getCommandUsage( sender ) );
+                int dimension = 0;
+                boolean set = false;
+
+                try
+                {
+                    dimension = Integer.parseInt( params[0] );
+                    set = true;
+                }catch( NumberFormatException e )
+                {
+                    set = false;
+                }
+
+                if( set )
+                {
+                    Location home = NBTHelper.getHomeLocation( player, dimension );
+
+                    if( home != null )
+                    {
+                        home.sendPlayerTo( player );
+                    }
+                    else
+                    {
+                        return_message = CommandHelper.getErrorMessage( "You do not have a home in that dimension." );
+                    }
+                }
+                else
+                {
+                    return_message = CommandHelper.getErrorMessage( "Correct usage is " + getCommandUsage( sender ) );
+                }
             }
         }
         else

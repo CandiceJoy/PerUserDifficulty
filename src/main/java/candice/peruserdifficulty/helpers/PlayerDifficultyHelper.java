@@ -16,8 +16,9 @@ public class PlayerDifficultyHelper
     private static PlayerDifficulty max_keepinventory;
     private static PlayerDifficulty max_home_command;
     private static PlayerDifficulty max_back_command;
+    private static PlayerDifficulty max_spawn_command;
 
-    public static void setConfig( double[] damage_taken_in, double[] damage_dealt_in, double[] food_in, double[] saturation_in, PlayerDifficulty max_keepinventory_in, PlayerDifficulty max_home_command_in, PlayerDifficulty max_back_command_in )
+    public static void setConfig( double[] damage_taken_in, double[] damage_dealt_in, double[] food_in, double[] saturation_in, PlayerDifficulty max_keepinventory_in, PlayerDifficulty max_home_command_in, PlayerDifficulty max_back_command_in, PlayerDifficulty max_spawn_command_in )
     {
         if( damage_taken_in.length != 3 || damage_dealt_in.length != 3 || food_in.length != 3 || saturation_in.length != 3 )
         {
@@ -31,6 +32,7 @@ public class PlayerDifficultyHelper
         max_keepinventory = max_keepinventory_in;
         max_home_command = max_home_command_in;
         max_back_command = max_back_command_in;
+        max_spawn_command = max_spawn_command_in;
     }
 
     public static PlayerDifficulty stringToDifficulty( String difficulty_string )
@@ -128,5 +130,10 @@ public class PlayerDifficultyHelper
     public static boolean shouldAllowBackCommand( PlayerDifficulty difficulty )
     {
         return difficultyToNumber( difficulty ) <= difficultyToNumber( max_back_command );
+    }
+
+    public static boolean shouldAllowSpawnCommand( PlayerDifficulty difficulty )
+    {
+        return difficultyToNumber( difficulty ) <= difficultyToNumber( max_spawn_command );
     }
 }
