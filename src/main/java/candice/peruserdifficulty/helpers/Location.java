@@ -53,12 +53,15 @@ public class Location
 
     public void sendPlayerTo( EntityPlayer player )
     {
-        if( player.dimension != dimension )
+        if( !player.worldObj.isRemote )
         {
-            player.travelToDimension( dimension );
-        }
+            if( player.dimension != dimension )
+            {
+                player.travelToDimension( dimension );
+            }
 
-        player.setPositionAndUpdate( x, y, z );
+            player.setPositionAndUpdate( x, y, z );
+        }
     }
 
     public void writeToNBT( NBTTagCompound compound )
