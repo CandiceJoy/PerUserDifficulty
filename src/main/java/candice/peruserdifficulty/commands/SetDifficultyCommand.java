@@ -8,6 +8,7 @@ import candice.peruserdifficulty.helpers.Utils;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChatComponentText;
 
 import java.util.ArrayList;
@@ -63,12 +64,12 @@ public class SetDifficultyCommand extends CommandBase
     @Override
     public void processCommand( ICommandSender sender, String[] params )
     {
-        if( !( sender instanceof EntityPlayer ) )
+        if( !( sender instanceof EntityPlayerMP ) )
         {
             return;
         }
 
-        EntityPlayer player = (EntityPlayer) sender;
+        EntityPlayerMP player = (EntityPlayerMP) sender;
         ChatComponentText return_message = null;
 
         if( params.length == 0 )

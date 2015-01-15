@@ -55,7 +55,7 @@ public class Location
     {
         if( !player.worldObj.isRemote )
         {
-            if( player.dimension != dimension )
+            if( player.getEntityWorld().provider.dimensionId != dimension )
             {
                 player.travelToDimension( dimension );
             }
