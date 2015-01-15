@@ -21,6 +21,14 @@ public class Location
         z = z_in;
     }
 
+    public Location( EntityPlayer player )
+    {
+        dimension = player.getEntityWorld().provider.dimensionId;
+        x = player.posX;
+        y = player.posY;
+        z = player.posZ;
+    }
+
     public static Location readFromNBT( NBTTagCompound compound )
     {
         int dimension_temp = compound.getInteger( NBTHelper.DIMENSION_NBT );

@@ -78,15 +78,17 @@ public class HomeCommand extends CommandBase
         else if( params.length == 0 )
         {
             int dimension = player.dimension;
-            Location location = NBTHelper.getHomeLocation( player, dimension );
+            Location home = NBTHelper.getHomeLocation( player, dimension );
+            Location back = new Location( player );
 
-            if( location != null )
+            if( home != null )
             {
-                double x = location.getX();
-                double y = location.getY();
-                double z = location.getZ();
+                double x = home.getX();
+                double y = home.getY();
+                double z = home.getZ();
 
-                location.sendPlayerTo( player );
+                NBTHelper.setBackLocation( player, back );
+                home.sendPlayerTo( player );
             }
             else
             {
