@@ -104,7 +104,9 @@ public class HomeCommand extends CommandBase
                 double y = player.posY;
                 double z = player.posZ;
 
-                NBTHelper.setHomeLocation( player, new Location( dimension, x, y, z ) );
+                Location home = new Location( dimension, x, y, z );
+
+                NBTHelper.setHomeLocation( player, home );
                 return_message = CommandHelper.getReturnMessage( "Home location set." );
             }
             else
