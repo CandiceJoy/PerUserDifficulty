@@ -57,6 +57,7 @@ public class PerUserDifficultyMod
         event.registerServerCommand( new HomeCommand() );
         event.registerServerCommand( new BackCommand() );
         event.registerServerCommand( new SpawnCommand() );
+        event.registerServerCommand( new TPZCommand() );
     }
 
     @Mod.EventHandler

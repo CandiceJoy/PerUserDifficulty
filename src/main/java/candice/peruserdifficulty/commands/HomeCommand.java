@@ -88,7 +88,12 @@ public class HomeCommand extends CommandBase
                 double z = home.getZ();
 
                 NBTHelper.setBackLocation( player, back );
-                home.sendPlayerTo( player );
+                boolean worked = home.sendPlayerTo( player );
+
+                if( !worked )
+                {
+                    return_message = CommandHelper.getErrorMessage( "Your home location is blocked." );
+                }
             }
             else
             {
@@ -129,7 +134,12 @@ public class HomeCommand extends CommandBase
 
                     if( home != null )
                     {
-                        home.sendPlayerTo( player );
+                        boolean worked = home.sendPlayerTo( player );
+
+                        if( !worked )
+                        {
+                            return_message = CommandHelper.getErrorMessage( "Your home location is blocked." );
+                        }
                     }
                     else
                     {

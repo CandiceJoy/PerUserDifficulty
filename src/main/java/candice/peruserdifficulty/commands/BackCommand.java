@@ -61,8 +61,16 @@ public class BackCommand extends CommandBase
 
             if( location != null )
             {
-                location.sendPlayerTo( player );
-                NBTHelper.eraseBackLocation( player );
+                boolean worked = location.sendPlayerTo( player );
+
+                if( worked )
+                {
+                    NBTHelper.eraseBackLocation( player );
+                }
+                else
+                {
+                    return_message = CommandHelper.getErrorMessage( "Your back location is blocked." );
+                }
             }
             else
             {

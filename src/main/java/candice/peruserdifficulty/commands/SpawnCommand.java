@@ -65,7 +65,12 @@ public class SpawnCommand extends CommandBase
             double y = player.worldObj.getSpawnPoint().posY;
             double z = player.worldObj.getSpawnPoint().posZ;
             Location spawn = new Location( 0, x, y, z );
-            spawn.sendPlayerTo( player );
+            boolean worked = spawn.sendPlayerTo( player );
+
+            if( !worked )
+            {
+                return_message = CommandHelper.getErrorMessage( "The spawn location is blocked." );
+            }
         }
 
         ( (EntityPlayer) sender ).addChatComponentMessage( return_message );

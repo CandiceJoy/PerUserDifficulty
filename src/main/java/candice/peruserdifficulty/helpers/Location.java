@@ -1,13 +1,20 @@
 package candice.peruserdifficulty.helpers;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockAir;
+import net.minecraft.block.BlockCactus;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 
 /**
  * Created by Candice on 1/8/2015.
  */
 public class Location
 {
+    public static final int SEARCH_RADIUS = 1;
+
     private int dimension;
     private double x;
     private double y;
@@ -59,16 +66,99 @@ public class Location
         return z;
     }
 
-    public void sendPlayerTo( EntityPlayer player )
+    public boolean sendPlayerTo( EntityPlayer player )
     {
-        if( !player.worldObj.isRemote )
+        if( player.worldObj.isRemote )
         {
-            if( player.getEntityWorld().provider.dimensionId != dimension )
-            {
-                player.travelToDimension( dimension );
-            }
+            return false;
+        }
 
-            player.setPositionAndUpdate( x, y, z );
+        int old_dim = player.dimension;
+        double old_x = player.posX;
+        double old_y = player.posY;
+        double old_z = player.posZ;
+
+        if( player.getEntityWorld().provider.dimensionId != dimension )
+        {
+            player.travelToDimension( dimension );
+        }
+
+        int x_as_int = (int) Math.round( x );
+        int y_as_int = (int) Math.round( y );
+        int z_as_int = (int) Math.round( z );
+        boolean proper_location_found = false;
+
+        if( !isValidTeleportLocation( player.worldObj, x_as_int, y_as_int, z_as_int ) )
+        {
+            for( int a = x_as_int - SEARCH_RADIUS; a <= x_as_int + SEARCH_RADIUS && !proper_location_found; a++ )
+            {
+                for( int b = y_as_int - SEARCH_RADIUS; b <= y_as_int + SEARCH_RADIUS && !proper_location_found; b++ )
+                {
+                    for( int c = z_as_int - SEARCH_RADIUS; c <= z_as_int + SEARCH_RADIUS && !proper_location_found; c++ )
+                    {
+                        if( isValidTeleportLocation( player.worldObj, a, b, c ) )
+                        {
+                            x_as_int = a;
+                            y_as_int = b;
+                            z_as_int = c;
+                            proper_location_found = true;
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            proper_location_found = true;
+        }
+
+        if( !proper_location_found )
+        {
+            player.travelToDimension( old_dim );
+            player.setPositionAndUpdate( old_x, old_y, old_z );
+
+            return false;
+        }
+
+        player.setPositionAndUpdate( x_as_int, y_as_int, z_as_int );
+        return true;
+    }
+
+    private boolean isValidTeleportLocation( World world, int x_in, int y_in, int z_in )
+    {
+        if( hasRoomForPlayer( world, x_in, y_in, z_in ) && isLocationSafe( world, x_in, y_in, z_in ) )
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private boolean hasRoomForPlayer( World world, int x_in, int y_in, int z_in )
+    {
+        if( world.isAirBlock( x_in, y_in, z_in ) && world.isAirBlock( x_in, y_in + 1, z_in ) )
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private boolean isLocationSafe( World world, int x_in, int y_in, int z_in )
+    {
+        Block bottom_block = world.getBlock( x_in, y_in - 1, z_in );
+
+        if( bottom_block instanceof BlockCactus || bottom_block instanceof BlockAir || bottom_block.getMaterial() == Material.lava )
+        {
+            return false;
+        }
+        else
+        {
+            return true;
         }
     }
 
